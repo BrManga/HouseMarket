@@ -6,6 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase
 import { db } from "../firebase.config"
 import { serverTimestamp, setDoc, doc } from 'firebase/firestore'
 import {toast} from 'react-toastify'
+import OAuth from '../components/OAuth'
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false)
@@ -34,7 +35,6 @@ function SignUp() {
             formDataCopy.timestamp=serverTimestamp()
             await setDoc(doc(db, 'users', user.uid), formDataCopy)
             navigate('/')
-            console.log({userCredential})
         } catch (error) {
            toast.error('Something went wrong with registration')
         }
@@ -63,7 +63,7 @@ function SignUp() {
                         </button>
                     </div>
                 </form>
-                {/* Google Auth */}
+               <OAuth/>
                 <Link to='/sign-in' className='registerLink'>Sign In</Link>
             </div>
         </>
