@@ -4,6 +4,8 @@ import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
 import {doc, setDoc, getDoc, serverTimestamp} from 'firebase/firestore'
 import {toast} from 'react-toastify'
 import {db} from '../firebase.config'
+import React from 'react'
+
 
 function OAuth() {
     const navigate=useNavigate()
