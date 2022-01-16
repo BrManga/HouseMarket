@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { db } from "../firebase.config"
+import { serverTimestamp, setDoc, doc } from 'firebase/firestore'
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
-        name:'',
+        name: '',
         email: '',
         password: '',
     })
@@ -13,8 +16,26 @@ function SignUp() {
     const navigate = useNavigate()
     const onChange = (e) => {
         setFormData((prevState) => ({
-            ...prevState, [e.target.id]: e.target.value})
+            ...prevState, [e.target.id]: e.target.value
+        })
         )
+    }
+    const onSubmit =async (e) => {
+        e.preventDefault()
+        try {
+            const auth=getAuth()
+            const userCredential= await createUserWithEmailAndPassword(auth, email, password)
+            const user=userCredential.user
+            updateProfile(auth.currentUser,{displayName:name})
+            const formDataCopy={...formData}
+            delete formDataCopy.password
+            formDataCopy.timestamp=serverTimestamp()
+            await setDoc(doc(db, 'users', user.uid), formDataCopy)
+            navigate('/')
+            console.log({userCredential})
+        } catch (error) {
+            console.log(error)
+        }
     }
     return (
         <>
@@ -22,8 +43,8 @@ function SignUp() {
                 <header>
                     <p className="pageHeader">Welcome Back!</p>
                 </header>
-                <form>
-                <input type="text" id='name' className="nameInput" placeholder='Name' value={name} onChange={onChange} />
+                <form onSubmit={onSubmit}>
+                    <input type="text" id='name' className="nameInput" placeholder='Name' value={name} onChange={onChange} />
 
                     <input type="email" id='email' className="emailInput" placeholder='EMail' value={email} onChange={onChange} />
                     <div className="passwordInputDiv">
