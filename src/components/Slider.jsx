@@ -38,7 +38,7 @@ function Slider() {
   }
   return listings && (
     <>
-      <p className="exploreHeading">Recommmended</p>
+      <p className="exploreHeading">Recommended</p>
       <Swiper slidesPerView={1} pagination={{ clickable: true }} >
         {listings.map(({ data, id }) => {
           return (<SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
