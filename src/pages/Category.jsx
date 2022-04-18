@@ -14,7 +14,7 @@ function Category() {
         const fetchListings = async () => {
             try {
                 const listingsRef = collection(db, 'listings')
-                const q = query(listingsRef, where('type', '==', params.categoryName), orderBy('timestamp', 'desc'), limit(5))
+                const q = query(listingsRef, where('type', '==', params.categoryName), orderBy('timestamp', 'desc'), limit(3))
                 const querySnap = await getDocs(q)
                 const lastVisible = querySnap.docs[querySnap.docs.length - 1]
                 setLastFetchedListing(lastVisible)
@@ -44,7 +44,7 @@ function Category() {
                 where('type', '==', params.categoryName),
                 orderBy('timestamp', 'desc'),
                 startAfter(lastFetchedListing),
-                limit(5)
+                limit(3)
             )
 
             // Execute query

@@ -13,7 +13,7 @@ function Offers() {
         const fetchListings = async () => {
             try {
                 const listingsRef = collection(db, 'listings')
-                const q = query(listingsRef, where('offer', '==', true), orderBy('timestamp', 'desc'), limit(5))
+                const q = query(listingsRef, where('offer', '==', true), orderBy('timestamp', 'desc'), limit(3))
                 const querySnap = await getDocs(q)
                 const lastVisible = querySnap.docs[querySnap.docs.length - 1]
                 setLastFetchedListing(lastVisible)
@@ -43,7 +43,7 @@ function Offers() {
             where('offer', '==', true),
             orderBy('timestamp', 'desc'),
             startAfter(lastFetchedListing),
-            limit(5)
+            limit(3)
           )
     
           // Execute query
