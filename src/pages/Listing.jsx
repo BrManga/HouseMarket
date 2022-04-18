@@ -22,7 +22,6 @@ function Listing() {
       const docRef = doc(db, 'listings', params.listingId)
       const docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
-        console.log(docSnap.data())
         setListing(docSnap.data())
         setLoading(false)
       }
@@ -62,7 +61,7 @@ function Listing() {
         <p className="listingName">{listing.name} - {listing.offer ? listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : listing.regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}€</p>
         <p className='listingLocation'>{listing.location}</p>
         <p className="listingType">
-          For {listing.type == 'rent' ? 'Rent' : 'Sale'}
+          For {listing.type === 'rent' ? 'Rent' : 'Sale'}
         </p>
         {listing.offer && (
           <p className='discountPrice'>

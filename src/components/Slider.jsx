@@ -14,11 +14,11 @@ function Slider() {
   const [listings, setListings] = useState(null)
   const navigate = useNavigate()
   useEffect(() => {
-    const fetchListings = async () =>{
+    const fetchListings = async () => {
       const listingsRef = collection(db, 'listings')
       const q = query(listingsRef, orderBy('timestamp', 'desc'), limit(10))
       const querySnap = await getDocs(q)
-      let listings=[]
+      let listings = []
       querySnap.forEach((doc) => {
         return listings.push({
           id: doc.id,
@@ -30,28 +30,31 @@ function Slider() {
     }
     fetchListings()
   }, [])
-  if(loading){
-    return <Spinner/>
+  if (loading) {
+    return <Spinner />
+  }
+  if (listings.length === 0) {
+    return <></>
   }
   return listings && (
     <>
-    <p className="exploreHeading">Recommmended</p>
-    <Swiper slidesPerView={1} pagination={{clickable:true}} >
-      {listings.map(({data, id})=>{
-      return (  <SwiperSlide key={id} onClick={()=>navigate(`/category/${data.type}/${id}`)}>
-          <div className="swiperSlideDiv" style={{background:`url(${data.imgUrls[0]}) center no-repeat`,backgroundSize:'cover' }}>
-            <p className="swiperSlideText">
-              {data.name}
-            </p>
-            <p className="swiperSlidePrice">
-              ${data.discountedPrice??data.regularPrice}
-              {data.type=='rent'&&'/month'}
-            </p>
-          </div>
-        </SwiperSlide>)
-      })}
+      <p className="exploreHeading">Recommmended</p>
+      <Swiper slidesPerView={1} pagination={{ clickable: true }} >
+        {listings.map(({ data, id }) => {
+          return (<SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
+            <div className="swiperSlideDiv" style={{ background: `url(${data.imgUrls[0]}) center no-repeat`, backgroundSize: 'cover' }}>
+              <p className="swiperSlideText">
+                {data.name}
+              </p>
+              <p className="swiperSlidePrice">
+                ${data.discountedPrice ?? data.regularPrice}
+                {data.type === 'rent' && '/month'}
+              </p>
+            </div>
+          </SwiperSlide>)
+        })}
 
-    </Swiper>
+      </Swiper>
     </>
   )
 }
